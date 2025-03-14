@@ -1,23 +1,30 @@
-# Compilador y opciones
+# Compilador
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall
 
-# Archivos
-SRCS = main.cpp preprocessing.cpp
-OBJS = $(SRCS:.cpp=.o)
-EXEC = main
+# Opciones del compilador
+CXXFLAGS = -std=c++17 -Wall -Ideps
 
-# Regla por defecto
-all: $(EXEC)
+# Directorios
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = .
 
-# Cómo crear el ejecutable
-$(EXEC): $(OBJS)
-	$(CXX) $(OBJS) -o $(EXEC)
+# Archivos objeto
+OBJ = $(OBJ_DIR)/main.o
 
-# Cómo compilar archivos .cpp a .o
-%.o: %.cpp
+# Nombre del ejecutable
+TARGET = $(BIN_DIR)/main
+
+# Regla para compilar el ejecutable
+$(TARGET): $(OBJ)
+	$(CXX) $(OBJ) -o $(TARGET)
+
+# Regla para compilar los archivos .cpp a .o
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Limpiar archivos generados
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -f $(OBJ_DIR)/*.o $(TARGET)
+
+.PHONY: clean

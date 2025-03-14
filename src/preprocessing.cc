@@ -1,5 +1,5 @@
 #include "preprocessing.hh"
 
-string removeStopwords(const string& text) {
-    return text;
+void removeStopwords(/*const string& text*/) {
+
 }
