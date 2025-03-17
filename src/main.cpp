@@ -31,9 +31,8 @@ double jaccard_similarity(const unordered_set<string>& set1, const unordered_set
     return (double)intersection_size / union_size;
 }
 
-
 int main() {
-    ifstream inputFile("./docs/MobyDick.txt");
+    ifstream inputFile("./docs/Frankenstein.txt");
     if (!inputFile.is_open()) {
         cerr << "No se pudo abrir el archivo." << endl;
         return 1;
@@ -47,8 +46,8 @@ int main() {
 
 
 
-    string signos = ".,;:¿?¡!\"'()_-[]{}—…‐‑‒–—―/\\«»‹›‘’“”";
-    unordered_set<char> punctuationMarks(signos.begin(), signos.end());
+    string symbols = ".,;:¿?¡!\"'()_-[]{}—…‐‑‒–—―/\\«»‹›‘’“”";
+    unordered_set<char> punctuationMarks(symbols.begin(), symbols.end());
 
 
 
@@ -58,7 +57,10 @@ int main() {
         return 1;
     }
 
+    toLowercase(text);
+    removeStopwords(text, "en");
     cleanText(text, punctuationMarks);
+
     outputFile << text << endl;
     outputFile.close();
 }

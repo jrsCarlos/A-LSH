@@ -1,5 +1,43 @@
 #include "preprocessing.hh"
 
+using json = nlohmann::json;
+using namespace std;
+
+// Función para cargar las stopwords desde el JSON
+unordered_set<string> loadStopwords(const string& idioma) {
+    ifstream inputFile("deps/stopwords.json");  // Abre el inputFile
+    if (!inputFile) {
+        cerr << "No se pudo abrir el inputFile JSON.\n";
+    }
+
+    json json_data;
+    inputFile >> json_data;
+
+    unordered_set<string> stopwords;
+    if (json_data.contains(idioma)) {
+        vector<string> stopwords_vector = json_data[idioma].get<vector<string>>();
+        stopwords.insert(stopwords_vector.begin(), stopwords_vector.end());
+    }
+    return stopwords;
+}
+
+void removeStopwords(string& text, const string& idioma) {
+    unordered_set<string> stopwords = loadStopwords(idioma);
+    
+    stringstream ss(text);
+    string palabra;
+    string cleanText;
+
+    while (ss >> palabra) {
+        if (stopwords.find(palabra) == stopwords.end()) {
+            if (!cleanText.empty()) cleanText += " ";
+            cleanText += palabra;
+        }
+    }
+
+    text = cleanText;
+}
+
 void cleanText(string& text, unordered_set<char>& punctuationMarks) {
     size_t write_idx = 0;
     bool space = false;
@@ -33,4 +71,10 @@ void cleanText(string& text, unordered_set<char>& punctuationMarks) {
     }
     
     text.erase(write_idx);
+}
+
+void toLowercase(string& text) {
+    wstring noLowercaseText = wstring(text.begin(), text.end());
+    transform(noLowercaseText.begin(), noLowercaseText.end(), noLowercaseText.begin(), towlower);
+    text = string(noLowercaseText.begin(), noLowercaseText.end());
 }
