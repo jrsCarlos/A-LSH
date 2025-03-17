@@ -7,14 +7,21 @@
 #include <iostream>
 #include <unordered_set>
 
+using json = nlohmann::json;
 using namespace std;
-using namespace nlohmann;
 
-void cleanText(string& text, unordered_set<char>& punctuationMarks);
-
+// Carga las stopwords de un idioma
+// En el json de las stopwords, tenemos ES, EN y CA
 unordered_set<string> loadStopwords(const string& idioma);
-void removeStopwords(string& text, const string& idioma);
 
+// Limpia el texto de signos de puntuacion y caracteres especiales
+void cleanText(string& text);
+
+// Convierte el texto a minusculas
+//(DE MOMENTO NO FUNCIONA CON ACENTOS, DIERESIS, VIRGUILLAS O CEDILLAS)
 void toLowercase(string& text);
+
+// Elimina las stopwords del texto
+void removeStopwords(string& text, const string& idioma);
 
 #endif
