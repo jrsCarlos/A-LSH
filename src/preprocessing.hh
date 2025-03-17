@@ -2,10 +2,11 @@
 #define PREPROCESSING_HH
 
 #include "json.hpp"
+#include <unordered_set>
 
 using namespace std;
 using namespace nlohmann;
 
-void removeStopwords(/*const string& text*/);
+void cleanText(string& text, unordered_set<char>& punctuationMarks);
 
 #endif
