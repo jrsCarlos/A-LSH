@@ -1,4 +1,4 @@
-#include "preprocessing.hh"
+#include "preprocessing.hpp"
 
 unordered_set<string> loadStopwords(const string& language) {
     string filePath = "deps/stopwords.json";

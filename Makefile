@@ -9,8 +9,6 @@ SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = .
 
-
-
 # Archivos objeto
 SRC = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
