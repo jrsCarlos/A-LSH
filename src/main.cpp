@@ -2,7 +2,7 @@
 #include "preprocessing.hpp"
 
 using namespace std;
-//Prueba
+
 int main() {
     ifstream inputFile("./docs/Prova.txt");
 
