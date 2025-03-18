@@ -14,4 +14,6 @@ double shinglesJaccardSimilarity(const unordered_set<string>& s1, const unordere
 
 vector<uint64_t> getMinhashSignature(const unordered_set<string>& shingles, uint64_t numHashes);
 
+double minhashJaccardSimilarity(const vector<uint64_t>& s1, const vector<uint64_t>& s2);
+
 #endif

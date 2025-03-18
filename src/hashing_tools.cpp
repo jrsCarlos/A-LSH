@@ -29,10 +29,18 @@ vector<uint64_t> getMinhashSignature(const unordered_set<string>& shingles, uint
 
         // Calculamos el hash de cada shingle y nos quedamos con el minimo
         for (const string& shingle : shingles) {
-            uint64_t hash_val = xxh64::hash(shingle.c_str(), shingle.size(), i);
-            if (hash_val < minhash) minhash = hash_val;
+            uint64_t newHash = xxh64::hash(shingle.c_str(), shingle.size(), i);
+            if (newHash < minhash) minhash = newHash;
         }
         signature[i] = minhash;
     }
     return signature;
+}
+
+double minhashJaccardSimilarity(const vector<uint64_t>& s1, const vector<uint64_t>& s2) {
+    int matches = 0;
+    int numHashes = s1.size();
+    for (int i = 0; i < numHashes; ++i) 
+        if (s1[i] == s2[i]) matches++;
+    return (double)matches / numHashes;
 }
