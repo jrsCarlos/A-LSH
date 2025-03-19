@@ -24,7 +24,7 @@ int main() {
     removeStopwords(text, "en");
     cleanText(text);
 
-    unordered_set<string> shingles;
+    ShingleSet shingles;
     generateShingles(shingles, text, 3);
     vector<uint64_t> minhashSignature = getMinhashSignature(shingles, 10);
     for (const auto& hash : minhashSignature) {
