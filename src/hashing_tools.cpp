@@ -21,6 +21,13 @@ double shinglesJaccardSimilarity(const ShingleSet& s1, const ShingleSet& s2) {
     return numIntersections / totalShingles;
 }
 
+double similitudShingles(int shingleNumi, int shingleNumj, int baseShingleNum){
+    double pi = shingleNumi/baseShingleNum;
+    double pj = shingleNumj/baseShingleNum;
+
+    return (pi * pj)/((pi + pj) - (pi * pj));
+}
+
 //////////////////////////////////////// MINHASH ///////////////////////////////////////
 
 vector<uint64_t> getMinhashSignature(const ShingleSet& shingles, uint64_t numHashes) {
