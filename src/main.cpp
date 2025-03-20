@@ -47,11 +47,15 @@ int main() {
     auto Tshingles = high_resolution_clock::now();
     //shingle size
     int shinglesNum = shingles.size();
+    int shinglesSize = shinglesNum * 3;
 
     vector<uint64_t> minhashSignature = getMinhashSignature(shingles, 10);
 
     //Timestamp finish generating minHash
     auto TminHash = high_resolution_clock::now();
+    //Size of minhash
+    int minHashNum = minhashSignature.size();
+    int minHashSize = minHashNum * sizeof(uint64_t);
 
     for (const auto& hash : minhashSignature) {
         cout << hash << endl;
@@ -93,10 +97,13 @@ int main() {
 
     //print times
     cout << endl << "-------------Data-------------" << endl;
-    cout << "Text size before cleanup: " << textSizeBC << " characters" << endl;
-    cout << "Text size after cleanup: " << textSizeAC << " characters" << endl;
-    cout << "We removed: " << textSizeBC - textSizeAC << " characters" << endl;
+    cout << "Text size before cleanup: " << textSizeBC << " bytes/characters" << endl;
+    cout << "Text size after cleanup: " << textSizeAC << " bytes/characters" << endl;
+    cout << "We removed: " << textSizeBC - textSizeAC << " bytes/characters" << endl;
     cout << "Num of Shingles: " << shinglesNum << " shingles" << endl;
+    cout << "Size of Shingles: " << shinglesSize << " bytes" << endl;
+    cout << "Num of MinHash: " << minHashNum << " shingles" << endl;
+    cout << "Size of MinHash: " << minHashSize << " bytes" << endl;
 
     cout << endl << "-------------Time-------------" << endl;
     cout << "Time to read files: " << Dread.count() << " ms" << endl;
