@@ -20,6 +20,7 @@ int main() {
     ///////////////////////////////////////////////////////////////////////////
 
     // Preprocesamiento del texto
+    lowerStrangeLetters(text);
     toLowercase(text);
     removeStopwords(text, "en");
     cleanText(text);

@@ -24,4 +24,7 @@ void toLowercase(string& text);
 // Elimina las stopwords del texto
 void removeStopwords(string& text, const string& idioma);
 
+// Como no hay manera de tratar todos los idiomas existentes y sus letras minusculas y mayusculas, lo hacemos 
+// a mano con los idiomas que trateremos, ingles, catalan, castellano. 
+void lowerStrangeLetters(string& text);
 #endif

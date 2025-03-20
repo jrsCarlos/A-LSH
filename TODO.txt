@@ -5,7 +5,7 @@ Docus:
     2. 100 palabras, pasar a k-shingles, y coger permutaciones de estos shingles. Generar los conjuntos de n k-shingles                                                 Montse
 
 Preprocesado:
-    1. Funcion manual pasar acentos etc minuscula. (Por ahora map, sino algo mejor)         Kris
+    1. Funcion manual pasar acentos etc minuscula. (Por ahora map, sino algo mejor)         Kris Hecho
 
 Hashingtools: 
     1. LSH (indicarle un documento y buscar el mas parecido)       Carlos 

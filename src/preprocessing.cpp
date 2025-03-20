@@ -84,3 +84,18 @@ void toLowercase(string& text) {
     // Conversion a string
     text = string(lowercaseText.begin(), lowercaseText.end());
 }
+
+void lowerStrangeLetters(string& text) {
+    map <char, char> letters = {
+        {'Ç', 'ç'},
+        {'Ñ', 'ñ'},
+        {'À','à'}, {'Á','á'}, {'Â', 'â'},
+        {'È', 'è'}, {'É', 'é'}, {'Ê', 'ê'},
+        {'Í', 'í'}, {'Î', 'î'}, {'Ï', 'ï'},
+        {'Ò', 'ò'}, {'Ó', 'ó'}, {'Ô', 'ô'},
+        {'Ù', 'ù'}, {'Ú', 'ú'}, {'Û', 'û'},
+        {'Ä', 'á'}, {'Ë', 'é'}, {'Ö', 'ö'}, {'Ü', 'ü'}
+    };
+
+    for (size_t i = 0; i < text.size(); i++) if (letters.find(text[i]) != letters.end()) text[i] = letters[text[i]];
+}
