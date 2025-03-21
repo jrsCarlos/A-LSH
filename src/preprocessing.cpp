@@ -85,33 +85,17 @@ void cleanText(string& text) {
 
 void toLowercase(string& text) {
     map<char,char> specialLetters = {
-        {'À', 'à'}, {'Á', 'á'}, {'Â', 'â'}, {'Ä', 'ä'},
-        {'È', 'è'}, {'É', 'é'}, {'Ê', 'ê'}, {'Ë', 'ë'},
-        {'Ì', 'ì'}, {'Í', 'í'}, {'Î', 'î'}, {'Ï', 'ï'},
-        {'Ò', 'ò'}, {'Ó', 'ó'}, {'Ô', 'ô'}, {'Ö', 'ö'},
-        {'Ù', 'ù'}, {'Ú', 'ú'}, {'Û', 'û'}, {'Ü', 'ü'},
+        {'À', 'a'}, {'Á', 'a'}, {'Â', 'a'}, {'Ä', 'a'},
+        {'È', 'e'}, {'É', 'e'}, {'Ê', 'e'}, {'Ë', 'e'},
+        {'Ì', 'i'}, {'Í', 'i'}, {'Î', 'i'}, {'Ï', 'i'},
+        {'Ò', 'o'}, {'Ó', 'o'}, {'Ô', 'o'}, {'Ö', 'o'},
+        {'Ù', 'u'}, {'Ú', 'u'}, {'Û', 'u'}, {'Ü', 'u'},
         {'Ç', 'ç'}, {'Ñ', 'ñ'}
     };
 
     for (char& letter : text) {
         if (specialLetters.count(letter)) letter = specialLetters[letter];
         letter = tolower(letter);
-    }
-}
-
-void removeAccents(string& text) {
-    // Map of accented characters to their non-accented equivalents
-    map<char,char> accentLetters = {
-        {'à', 'a'}, {'á', 'a'}, {'â', 'a'}, {'ä', 'a'},
-        {'è', 'e'}, {'é', 'e'}, {'ê', 'e'}, {'ë', 'e'},
-        {'ì', 'i'}, {'í', 'i'}, {'î', 'i'}, {'ï', 'i'},
-        {'ò', 'o'}, {'ó', 'o'}, {'ô', 'o'}, {'ö', 'o'},
-        {'ù', 'u'}, {'ú', 'u'}, {'û', 'u'}, {'ü', 'u'},
-        {'ç', 'c'}, {'ñ', 'n'}
-    };
-
-    for (char& letter : text) {
-        if (accentLetters.count(letter)) letter = accentLetters[letter];
     }
 }
 

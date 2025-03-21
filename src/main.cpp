@@ -46,7 +46,6 @@ int main() {
 
         // Limpiamos el resto del texto
         removeStopwords(docText, getLanguage(docText));
-        removeAccents(docText);
         cleanText(docText);
         saveDocument(docText, cleanDocsDir + "/" + docsNames[i].string());
     }

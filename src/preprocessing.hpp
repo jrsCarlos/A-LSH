@@ -24,8 +24,6 @@ void cleanText(string& text);
 // a mano con los idiomas que trateremos, ingles, catalan, castellano.
 void toLowercase(string& text);
 
-void removeAccents(string& text);
-
 // Elimina las stopwords del texto
 void removeStopwords(string& text, const string& idioma);
 
