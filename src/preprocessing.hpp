@@ -14,17 +14,20 @@ using namespace std;
 // En el json de las stopwords, tenemos ES, EN y CA
 unordered_set<string> loadStopwords(const string& idioma);
 
+string getLanguage(const string& text);
+
 // Limpia el texto de signos de puntuacion y caracteres especiales
 void cleanText(string& text);
 
 // Convierte el texto a minusculas
-//(DE MOMENTO NO FUNCIONA CON ACENTOS, DIERESIS, VIRGUILLAS O CEDILLAS)
+// Como no hay manera de tratar todos los idiomas existentes y sus letras minusculas y mayusculas, lo hacemos 
+// a mano con los idiomas que trateremos, ingles, catalan, castellano.
 void toLowercase(string& text);
+
+void removeAccents(string& text);
 
 // Elimina las stopwords del texto
 void removeStopwords(string& text, const string& idioma);
 
-// Como no hay manera de tratar todos los idiomas existentes y sus letras minusculas y mayusculas, lo hacemos 
-// a mano con los idiomas que trateremos, ingles, catalan, castellano. 
-void lowerStrangeLetters(string& text);
+
 #endif

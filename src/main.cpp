@@ -1,19 +1,74 @@
 #include "hashing_tools.hpp"
 #include "preprocessing.hpp"
+#include "document_generator.hpp"
+#include <filesystem>
+
+namespace fs = std::filesystem;
 using namespace std::chrono;
 using namespace std;
 
-int main() {
+string loadDocument(const string& docPath) {
+    ifstream docContent(docPath);
+    stringstream buffer;
+    buffer << docContent.rdbuf();
+    return buffer.str();
+}
 
+void saveDocument(const string& docText, const string& docPath) {
+    ofstream docContent(docPath);
+    docContent << docText;
+    docContent.close();
+}
+
+int main() {
+    //////////////////////////////// PREPROCESAMIENTO ////////////////////////////////
+
+    // Leemos todos los documentos del directorio docs
+    string docsDir = "./docs";
+    string expDir = "./exp-docs";
+    string cleanDocsDir = "./clean-docs";
+    
+    int numDocs = 0;
+    vector<fs::path> docsNames;
+    for (const auto& doc : fs::directory_iterator(docsDir)) {
+        if (doc.is_regular_file()) {
+            docsNames.push_back(doc.path().filename());
+            ++numDocs;
+        }
+    }
+    
+    for (int i = 0; i < numDocs; ++i) {
+        // Extraemos el texto de cada documento
+        string docText = loadDocument(docsDir + "/" + docsNames[i].string());
+
+        // Pasamos todo el texto a minimusculas para detectar todas las stopwords
+        toLowercase(docText);
+
+        // Limpiamos el resto del texto
+        removeStopwords(docText, getLanguage(docText));
+        removeAccents(docText);
+        cleanText(docText);
+        saveDocument(docText, cleanDocsDir + "/" + docsNames[i].string());
+    }
+
+    /////////////////// GENERACION DE LOS CONJUNTOS DE DOCUMENTOS ///////////////////
+
+    // BLOQUE 1
+    int D = 20;
+    for (int i = 0; i < numDocs; ++i) {
+        string docText = loadDocument(cleanDocsDir + "/" + docsNames[i].string());
+
+        for (int j = 0; j < D; ++j) {
+            string permutedText = generatePermutedText(docText);
+            string newName = "/" + to_string(j+1) + "_Permuted_" + docsNames[i].string();
+            saveDocument(permutedText, expDir + newName);
+        }
+    }
+    /*
     //Get time stamp begining
     auto Tstart = high_resolution_clock::now();
 
     ifstream inputFile("./docs/Prova.txt");
-
-    if (!inputFile.is_open()) {
-        cerr << "No se pudo abrir el archivo." << endl;
-        return 1;
-    }
 
     stringstream buffer;
     buffer << inputFile.rdbuf();
@@ -111,5 +166,5 @@ int main() {
     cout << "Time to generate shingles: " << Dshingles.count() << " ms" << endl;
     cout << "Time to generate minHash: " << DminHash.count() << " ms" << endl;
     cout << "Total time: " << Dtotal.count() << " ms" << endl;
-
+    */
 }

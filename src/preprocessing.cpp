@@ -15,23 +15,32 @@ unordered_set<string> loadStopwords(const string& language) {
     return stopwords;
 }
 
-void removeStopwords(string& text, const string& language) {
-    unordered_set<string> stopwords = loadStopwords(language);
-    
-    stringstream ss(text);
-    string word;
-    string noStopwordsText;
+string getLanguage(const string& text) {
+    // Contamos las ocurrencias de las stopwords de cada idioma
+    vector<string> languages = {"en", "ca", "es"};
+    unordered_set<string> stopwords;
 
-    while (ss >> word) {
-        // Si no es una stopword, la agregamos al texto
-        if (stopwords.find(word) == stopwords.end()) {
-            // Agregamos espacios para que no se junten las palabras
-            if (!noStopwordsText.empty()) noStopwordsText += " ";
-            noStopwordsText += word;
+    int languageIdx = 0;
+    int maxCount = -1;
+
+    int numLanguages = languages.size();
+    for (int i = 0; i < numLanguages; i++) {
+        stopwords = loadStopwords(languages[i]);
+        int count = 0;
+
+        stringstream ss(text);
+        string word;
+
+        while (ss >> word) {
+            if (stopwords.count(word)) ++count;
+        }
+
+        if (count > maxCount) {
+            maxCount = count;
+            languageIdx = i;
         }
     }
-
-    text = noStopwordsText;
+    return languages[languageIdx];
 }
 
 void cleanText(string& text) {
@@ -75,27 +84,53 @@ void cleanText(string& text) {
 }
 
 void toLowercase(string& text) {
-    // Conversion a wide string
-    wstring lowercaseText = wstring(text.begin(), text.end());
-
-    // Reemplazamos las mayusculas por minusculas
-    transform(lowercaseText.begin(), lowercaseText.end(), lowercaseText.begin(), towlower);
-
-    // Conversion a string
-    text = string(lowercaseText.begin(), lowercaseText.end());
-}
-
-void lowerStrangeLetters(string& text) {
-    map <char, char> letters = {
-        {'Ç', 'ç'},
-        {'Ñ', 'ñ'},
-        {'À','à'}, {'Á','á'}, {'Â', 'â'},
-        {'È', 'è'}, {'É', 'é'}, {'Ê', 'ê'},
-        {'Í', 'í'}, {'Î', 'î'}, {'Ï', 'ï'},
-        {'Ò', 'ò'}, {'Ó', 'ó'}, {'Ô', 'ô'},
-        {'Ù', 'ù'}, {'Ú', 'ú'}, {'Û', 'û'},
-        {'Ä', 'á'}, {'Ë', 'é'}, {'Ö', 'ö'}, {'Ü', 'ü'}
+    map<char,char> specialLetters = {
+        {'À', 'à'}, {'Á', 'á'}, {'Â', 'â'}, {'Ä', 'ä'},
+        {'È', 'è'}, {'É', 'é'}, {'Ê', 'ê'}, {'Ë', 'ë'},
+        {'Ì', 'ì'}, {'Í', 'í'}, {'Î', 'î'}, {'Ï', 'ï'},
+        {'Ò', 'ò'}, {'Ó', 'ó'}, {'Ô', 'ô'}, {'Ö', 'ö'},
+        {'Ù', 'ù'}, {'Ú', 'ú'}, {'Û', 'û'}, {'Ü', 'ü'},
+        {'Ç', 'ç'}, {'Ñ', 'ñ'}
     };
 
-    for (size_t i = 0; i < text.size(); i++) if (letters.find(text[i]) != letters.end()) text[i] = letters[text[i]];
+    for (char& letter : text) {
+        if (specialLetters.count(letter)) letter = specialLetters[letter];
+        letter = tolower(letter);
+    }
+}
+
+void removeAccents(string& text) {
+    // Map of accented characters to their non-accented equivalents
+    map<char,char> accentLetters = {
+        {'à', 'a'}, {'á', 'a'}, {'â', 'a'}, {'ä', 'a'},
+        {'è', 'e'}, {'é', 'e'}, {'ê', 'e'}, {'ë', 'e'},
+        {'ì', 'i'}, {'í', 'i'}, {'î', 'i'}, {'ï', 'i'},
+        {'ò', 'o'}, {'ó', 'o'}, {'ô', 'o'}, {'ö', 'o'},
+        {'ù', 'u'}, {'ú', 'u'}, {'û', 'u'}, {'ü', 'u'},
+        {'ç', 'c'}, {'ñ', 'n'}
+    };
+
+    for (char& letter : text) {
+        if (accentLetters.count(letter)) letter = accentLetters[letter];
+    }
+}
+
+
+void removeStopwords(string& text, const string& language) {
+    unordered_set<string> stopwords = loadStopwords(language);
+    
+    stringstream ss(text);
+    string word;
+    string noStopwordsText;
+
+    while (ss >> word) {
+        // Si no es una stopword, la agregamos al texto
+        if (stopwords.find(word) == stopwords.end()) {
+            // Agregamos espacios para que no se junten las palabras
+            if (!noStopwordsText.empty()) noStopwordsText += " ";
+            noStopwordsText += word;
+        }
+    }
+
+    text = noStopwordsText;
 }

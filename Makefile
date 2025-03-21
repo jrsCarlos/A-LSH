@@ -7,6 +7,8 @@ CXXFLAGS = -std=c++17 -Wall -Ideps
 # Directorios
 SRC_DIR = src
 OBJ_DIR = obj
+EXP_DIR = exp-docs
+CLN_DIR = clean-docs
 BIN_DIR = .
 
 # Archivos objeto
@@ -30,6 +32,6 @@ run: $(TARGET)
 
 # Limpiar archivos generados
 clean:
-	rm -f $(OBJ_DIR)/*.o $(TARGET)
+	rm -f $(OBJ_DIR)/*.o $(CLN_DIR)/*.txt $(EXP_DIR)/*.txt $(TARGET)
 
 .PHONY: clean
