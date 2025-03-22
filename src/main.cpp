@@ -38,7 +38,7 @@ int main() {
 
     /////////////////////////////// GENERACION DE MINHASHES //////////////////////////////
 
-    int numHashes = 100;
+    int numHashes = 200;
     vector<vector<uint64_t>> docsSignatures(numOfDocs);
 
     for (int i = 0; i < numOfDocs; ++i) {
@@ -50,8 +50,8 @@ int main() {
 
     //////////////////////////////////////// LSH /////////////////////////////////////////
 
-    int bands = 20;
-    int rows = 5;
+    int bands = 50;
+    int rows = 4;
     if (bands * rows != numHashes) {
         cout << "Error: bands * rows != numHashes" << endl;
         return 1;
@@ -65,7 +65,7 @@ int main() {
     int falsePositives = 0;
     int falseNegatives = 0;
     double truePositives = 0;
-    double simThreshold = 0.8;
+    double simThreshold = 0.4;
 
     /// CALCULO DE LOS PARES VERDADEROS ///
     unordered_set<pair<int,int>, pair_hash> trueSimilarPairs;
