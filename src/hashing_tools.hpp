@@ -1,11 +1,15 @@
 #ifndef HASHING_TOOLS_HPP
 #define HASHING_TOOLS_HPP
 
+#include <map>
+#include <chrono>
 #include <string>
 #include <vector>
 #include <limits>
+#include <iostream>
 #include "xxh64.hpp"
 #include <unordered_set>
+#include <unordered_map>
 
 using namespace std;
 using ShingleSet = unordered_set<string>;
