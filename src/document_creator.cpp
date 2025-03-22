@@ -1,38 +1,11 @@
-#include <string>
-#include <vector>
 #include <random>
 #include <algorithm>
-#include <filesystem>
+#include "utils.hpp"
 #include "preprocessing.hpp"
 
 namespace fs = std::filesystem;
 using json = nlohmann::json;
 using namespace std;
-
-
-vector<fs::path> getDocs(const string& docsDir) {
-    vector<fs::path> docsNames;
-    for (const auto& doc : fs::directory_iterator(docsDir)) {
-        if (doc.is_regular_file()) {
-            docsNames.push_back(doc.path().filename());
-        }
-    }
-    return docsNames;
-}
-
-string loadDocument(const string& docPath) {
-    ifstream docContent(docPath);
-    stringstream buffer;
-    buffer << docContent.rdbuf();
-    docContent.close();
-    return buffer.str();
-}
-
-void saveDocument(const string& docText, const string& docPath) {
-    ofstream docContent(docPath);
-    docContent << docText;
-    docContent.close();
-}
 
 // Separa el contenido del documento en palabras
 vector<string> readWords(string& text) {

@@ -8,8 +8,8 @@ OBJ_DIR := obj
 EXP_DIR := exp-docs
 
 # Archivos fuente específicos
-SRCS_MAIN := $(SRC_DIR)/main.cpp $(SRC_DIR)/hashing_tools.cpp
-SRCS_DOCS := $(SRC_DIR)/document_creator.cpp $(SRC_DIR)/preprocessing.cpp
+SRCS_MAIN := $(SRC_DIR)/main.cpp $(SRC_DIR)/hashing_tools.cpp $(SRC_DIR)/utils.cpp
+SRCS_DOCS := $(SRC_DIR)/document_creator.cpp $(SRC_DIR)/preprocessing.cpp $(SRC_DIR)/utils.cpp
 
 # Archivos objeto
 OBJS_MAIN := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS_MAIN))
