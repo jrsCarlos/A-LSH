@@ -1,37 +1,48 @@
-# Compilador
-CXX = g++
-
-# Opciones del compilador
-CXXFLAGS = -std=c++17 -Wall -Ideps
+# Compilador y flags
+CXX := g++
+CXXFLAGS := -Wall -std=c++17 -Ideps
 
 # Directorios
-SRC_DIR = src
-OBJ_DIR = obj
-EXP_DIR = exp-docs
-CLN_DIR = clean-docs
-BIN_DIR = .
+SRC_DIR := src
+OBJ_DIR := obj
+EXP_DIR := exp-docs
+
+# Archivos fuente específicos
+SRCS_MAIN := $(SRC_DIR)/main.cpp $(SRC_DIR)/hashing_tools.cpp
+SRCS_DOCS := $(SRC_DIR)/document_creator.cpp $(SRC_DIR)/preprocessing.cpp
 
 # Archivos objeto
-SRC = $(wildcard $(SRC_DIR)/*.cpp)
-OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+OBJS_MAIN := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS_MAIN))
+OBJS_DOCS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS_DOCS))
 
-# Nombre del ejecutable
-TARGET = $(BIN_DIR)/main
+# Binaries
+MAIN := main
+DOCS := docsCreator
 
-# Regla para compilar el ejecutable
-$(TARGET): $(OBJ)
-	$(CXX) $(OBJ) -o $(TARGET)
+# Regla por defecto
+all: $(MAIN) $(DOCS)
 
-# Regla para compilar los archivos .cpp a .o
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+# Compilar main con optimización
+$(MAIN): $(OBJS_MAIN) | $(OBJ_DIR)
+	$(CXX) -o $@ $^ -O2
+
+# Compilar docs con depuración
+$(DOCS): $(OBJS_DOCS) | $(OBJ_DIR)
+	$(CXX) -o $@ $^ -g
+
+# Regla para compilar objetos de MAIN
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/hashing_tools.cpp | $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Regla para ejecutar el programa
-run: $(TARGET)
-	$(TARGET)
+# Regla para compilar objetos de DOCS
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/preprocessing.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Crear la carpeta obj si no existe
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
 # Limpiar archivos generados
-clean:
-	rm -f $(OBJ_DIR)/*.o $(CLN_DIR)/*.txt $(EXP_DIR)/*.txt $(TARGET)
-
 .PHONY: clean
+clean:
+	rm -rf $(OBJ_DIR)/*.o $(EXP_DIR)/*.txt $(MAIN) $(DOCS)

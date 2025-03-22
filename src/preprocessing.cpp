@@ -99,7 +99,6 @@ void toLowercase(string& text) {
     }
 }
 
-
 void removeStopwords(string& text, const string& language) {
     unordered_set<string> stopwords = loadStopwords(language);
     
