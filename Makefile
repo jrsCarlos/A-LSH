@@ -42,6 +42,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/preprocessing.cpp | $(OBJ_DIR)
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
+run: $(MAIN)
+	./$(MAIN)
+
 # Limpiar archivos generados
 .PHONY: clean
 clean:

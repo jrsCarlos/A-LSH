@@ -66,36 +66,25 @@ struct pair_hash {
 };
 
 // aun por retocar
-LSHResults LSH(
-    const vector<vector<uint64_t>>& signatures, // Firmas MinHash de todos los documentos
-    const LSHParams& params,
-    const vector<ShingleSet>& shingles,         // Shingles originales para calculo de Jaccard real
-    double simThreshold                         // Umbral real para considerar similares
-) {
-    LSHResults results;
+vector<pair<int,int>> LSH(const vector<vector<uint64_t>>& signatures, int numBands, int numRows) {
     //////////////////////////////// CREAR BANDAS & HASHEAR ////////////////////////////////
     
-    auto startHashing = chrono::high_resolution_clock::now();
-
     // vector<unordered_map<string, vector<int>>>: Almacena todas las bandas del LSH
-    //
     // unordered_map<unint64_t, vector<int>>: Almacena todos los documentos que comparten el mismo hash en una banda
-    // |_ uint64_t: Hash de la subfirma
-    // |_ vector<int>: Almacena los IDs que comparten el mismo hash en una banda
-    //
     // vector<int>: Almacena los IDs que comparten el mismo hash en una banda
-    vector<unordered_map<uint64_t, vector<int>>> bands(params.bands);
+    
+    vector<unordered_map<uint64_t, vector<int>>> bands(numBands);
     int docID = 0;
     
     // Iteramos sobre todos los documentos (signatures)
     for (const auto& signature : signatures) {
-        for (int band = 0; band < params.bands; ++band) {
+        for (int band = 0; band < numBands; ++band) {
             // Claculamos la posicion del primer elemento de la subfirma
-            auto subSignature = signature.data() + band * params.rows;
+            auto subSignature = signature.data() + band * numRows;
             
             // Hasheamos todos los elementos de la subfirma
             const char *ptr = reinterpret_cast<const char*>(subSignature);
-            uint64_t length = params.rows * sizeof(uint64_t);
+            uint64_t length = numRows * sizeof(uint64_t);
             uint64_t bandHash = xxh64::hash(ptr, length, band);
             
             // Almacenar en la banda
@@ -103,10 +92,7 @@ LSHResults LSH(
         }
         ++docID;
     }
-    
-    auto endHashing = chrono::high_resolution_clock::now();
-    results.timings["Hashing"] = chrono::duration<double>(endHashing - startHashing).count();
-    
+        
     /////////////////////////////// GENERAR PARES CANDIDATOS ///////////////////////////////
 
     unordered_set<pair<int,int>, pair_hash> uniquePairs;
@@ -128,49 +114,7 @@ LSHResults LSH(
     
     /////////////////////////////////// PARES TO INDICES ///////////////////////////////////
 
-    for (const auto& pair : uniquePairs) {
-        results.candidatePairs.emplace_back(pair);
-    }
-    
-    auto endCandidates = chrono::high_resolution_clock::now();
-    results.timings["CandidatesGeneration"] = chrono::duration<double>(endCandidates - endHashing).count();
-    
-    //////////////////////////////// VERIFICACION DE PARES ////////////////////////////////
-
-    unordered_set<string> trueSimilarPairs;
-    for (size_t i = 0; i < shingles.size(); ++i) {
-        for (size_t j = i+1; j < shingles.size(); ++j) {
-            double sim = shinglesJaccardSimilarity(shingles[i], shingles[j]);
-            if (sim >= simThreshold) {
-                trueSimilarPairs.insert(to_string(i) + "-" + to_string(j));
-            }
-        }
-    }
-    
-    ///////////////////////////////// CALCULO DE METRICAS /////////////////////////////////
-
-    for (const auto& pair : results.candidatePairs) {
-        string pair_str = to_string(pair.first) + "-" + to_string(pair.second);
-        
-        if (trueSimilarPairs.count(pair_str)) {
-            results.truePositives++;
-        }
-        else ++results.falsePositives;
-    }
-    
-    results.falseNegatives = trueSimilarPairs.size() - results.truePositives;
-    
-    ///////////////////////////// CALCULO DE PRECISION Y RECALL /////////////////////////////
-    if (!results.candidatePairs.empty()) {
-        results.precision = static_cast<double>(results.truePositives) / results.candidatePairs.size();
-    }
-    
-    if (!trueSimilarPairs.empty()) {
-        results.recall = static_cast<double>(results.truePositives) / trueSimilarPairs.size();
-    }
-    
-    auto endTotal = chrono::high_resolution_clock::now();
-    results.timings["Total"] = chrono::duration<double>(endTotal - startHashing).count();
-    
-    return results;
+    vector<pair<int,int>> candidatePairs;
+    for (const auto& pair : uniquePairs) candidatePairs.push_back(pair);
+    return candidatePairs;
 }
