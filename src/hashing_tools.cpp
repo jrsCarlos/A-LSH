@@ -11,15 +11,12 @@ void generateShingles(ShingleSet& shingles, const string& text, int k) {
 }
 
 double shinglesJaccardSimilarity(const ShingleSet& s1, const ShingleSet& s2) {
-    double numIntersections = 0;
-    int totalShingles = s1.size();
-
+    int intersection = 0;
     for (const string& shingle : s2) {
-        if (s1.find(shingle) != s1.end()) numIntersections++;
-        else totalShingles++;
+        if (s1.find(shingle) != s1.end()) ++intersection;
     }
-
-    return numIntersections / totalShingles;
+    double unionSize = s1.size() + s2.size() - intersection;
+    return intersection / unionSize;
 }
 
 double similitudShingles(int shingleNumi, int shingleNumj, int baseShingleNum){

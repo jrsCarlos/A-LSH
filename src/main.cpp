@@ -5,6 +5,15 @@ namespace fs = std::filesystem;
 using namespace std::chrono;
 using namespace std;
 
+struct pair_hash {
+    template <class T1, class T2>
+    std::size_t operator()(const std::pair<T1, T2>& p) const {
+        auto hash1 = std::hash<T1>{}(p.first);
+        auto hash2 = std::hash<T2>{}(p.second);
+        return hash1 ^ (hash2 << 1);
+    }
+};
+
 int main() {
 
     //Get time stamp begining
@@ -13,14 +22,15 @@ int main() {
     // Leemos todos los documentos
     string docsDir = "./exp-docs";
     vector<fs::path> docs = getDocs(docsDir);
+    int numOfDocs = docs.size();
 
 
     /////////////////////////////// GENERACION DE SHINGLES ///////////////////////////////
 
     int K = 5;
-    vector<ShingleSet> docsShingles(docs.size());
+    vector<ShingleSet> docsShingles(numOfDocs);
 
-    for (int i = 0; i < docs.size(); ++i) {
+    for (int i = 0; i < numOfDocs; ++i) {
         string docPath = docsDir + "/" + docs[i].string();
         string docText = loadDocument(docPath);
         generateShingles(docsShingles[i], docText, K);
@@ -28,68 +38,69 @@ int main() {
 
     /////////////////////////////// GENERACION DE MINHASHES //////////////////////////////
 
-    int numHashes = 10;
-    vector<vector<uint64_t>> docsSignatures(docs.size());
+    int numHashes = 100;
+    vector<vector<uint64_t>> docsSignatures(numOfDocs);
 
-    for (int i = 0; i < docs.size(); ++i) {
+    for (int i = 0; i < numOfDocs; ++i) {
         docsSignatures[i] = getMinhashSignature(docsShingles[i], numHashes);
+        cout << "Signature doc " << i << ": ";
+        for (auto val : docsSignatures[i]) cout << val << " ";
+        cout << endl;
     }
 
     //////////////////////////////////////// LSH /////////////////////////////////////////
 
-    int bands = 5;
-    int rows = 2;
+    int bands = 20;
+    int rows = 5;
     if (bands * rows != numHashes) {
         cout << "Error: bands * rows != numHashes" << endl;
         return 1;
     }
     vector<pair<int, int>> candidatePairs = LSH(docsSignatures, bands, rows);
-    cout << "Candidate pairs: " << candidatePairs.size() << endl;
-    for (const auto& pair : candidatePairs) {
-        cout << pair.first << " " << pair.second << endl;
-    }
 
     //////////////////////////////////// ESTADISTICAS ////////////////////////////////////
 
     double recall = 0.0;
     double precision = 0.0;
-    int truePositives =  0;
     int falsePositives = 0;
     int falseNegatives = 0;
+    double truePositives = 0;
     double simThreshold = 0.8;
 
     /// CALCULO DE LOS PARES VERDADEROS ///
-    unordered_set<string> trueSimilarPairs;
-    for (size_t i = 0; i < docsShingles.size(); ++i) {
-        for (size_t j = i+1; j < docsShingles.size(); ++j) {
+    unordered_set<pair<int,int>, pair_hash> trueSimilarPairs;
+    for (int i = 0; i < numOfDocs; ++i) {
+        for (int j = i + 1; j < numOfDocs; ++j) {
             double sim = shinglesJaccardSimilarity(docsShingles[i], docsShingles[j]);
+            cout << "Sim between " << i << " and " << j << ": " << sim << endl;
             if (sim >= simThreshold) {
-                trueSimilarPairs.insert(to_string(i) + "-" + to_string(j));
+                trueSimilarPairs.insert({i,j});
             }
         }
     }
 
-    /// CALCULO DE CANDIDATE PAIRS ///
+    unordered_set<pair<int, int>, pair_hash> candidateSet(
+        candidatePairs.begin(), candidatePairs.end()
+    );
+    
+    // True Positives y False Positives
     for (const auto& pair : candidatePairs) {
-        string pair_str = to_string(pair.first) + "-" + to_string(pair.second);
-        
-        if (trueSimilarPairs.count(pair_str)) {
-            truePositives++;
-        }
+        if (trueSimilarPairs.count(pair)) ++truePositives;
         else ++falsePositives;
     }
-
-    falseNegatives = trueSimilarPairs.size() - truePositives;
-
-    /// CALCULO DE PRECISION Y RECALL ///
-    if (!candidatePairs.empty()) {
-        precision = static_cast<double>(truePositives) / candidatePairs.size();
+    
+    // False Negatives: Pares verdaderos no en candidatos
+    for (const auto& truePair : trueSimilarPairs) {
+        if (!candidateSet.count(truePair)) ++falseNegatives;
     }
     
-    if (!trueSimilarPairs.empty()) {
-        recall = static_cast<double>(truePositives) / trueSimilarPairs.size();
+    // Cálculo de recall y precisión
+    if (truePositives + falseNegatives > 0) {
+        recall = truePositives / (truePositives + falseNegatives);
     }
-
+    if (truePositives + falsePositives > 0) {
+        precision = truePositives / (truePositives + falsePositives);
+    }
 
     cout << "True Positives: " << truePositives << endl;
     cout << "False Positives: " << falsePositives << endl;
@@ -107,7 +118,6 @@ int main() {
     //Duration to finish
     auto Dtotal = duration_cast<microseconds>(Tfinal - Tstart);
     cout << "Total time: " << Dtotal.count() << " ms" << endl;
-
 
     /* OLD TIME CALC
         //Duration to read
