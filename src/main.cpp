@@ -34,6 +34,10 @@ int main() {
     ofstream csvFile;
     csvFile.open("dataFile.csv");
 
+    ofstream simsCsvFile;
+    simsCsvFile.open("simsFile.csv");
+    simsCsvFile << "Documet1,Document2,numHashes,ShinglesJaccard,MinHashJaccard" << endl;
+
     // Encabezado del CSV
     csvFile << "K,numHashes,numBandas,rows,Threshold,";
     csvFile << "NumOfDocs,";
@@ -119,8 +123,9 @@ int main() {
                         for (int i = 0; i < numOfDocs; ++i) {
                             for (int j = i + 1; j < numOfDocs; ++j) {
                                 double sim = shinglesJaccardSimilarity(docsShingles[i], docsShingles[j]);
+                                double sim2 = minhashJaccardSimilarity(docsSignatures[i], docsSignatures[j]);
                                 //cout << "Sim between " << docs[i].stem() << " and " << docs[j].stem() << ": " << sim << endl;
-                                
+                                simsCsvFile << docs[i].stem() << "," << docs[j].stem() << ","  << numHashes << "," << sim << "," << sim2 << endl;
                                 if (sim >= simThreshold) {
                                     trueSimilarPairs.insert({i,j});
                                 }
