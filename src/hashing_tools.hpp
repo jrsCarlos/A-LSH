@@ -20,6 +20,10 @@ void generateShingles(ShingleSet& shingles, const string& text, int k);
 
 double shinglesJaccardSimilarity(const ShingleSet& s1, const ShingleSet& s2);
 
+double similitudShingles(int shingleNumi, int shingleNumj, int baseShingleNum);
+
+ShingleSet obtenerSubconjuntoAleatorio(const ShingleSet& conjunto, size_t tamanoSubconjunto);
+
 //////////////////////////////////////// MINHASH ///////////////////////////////////////
 
 vector<uint64_t> getMinhashSignature(const ShingleSet& shingles, uint64_t numHashes);

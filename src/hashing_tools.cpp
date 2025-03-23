@@ -1,5 +1,6 @@
 #include "hashing_tools.hpp"
 #include <cassert>
+#include <random>
 
 /////////////////////////////////////// SHINGLES ///////////////////////////////////////
 
@@ -26,6 +27,28 @@ double similitudShingles(int shingleNumi, int shingleNumj, int baseShingleNum){
     return (pi * pj)/((pi + pj) - (pi * pj));
 }
 
+ShingleSet obtenerSubconjuntoAleatorio(const ShingleSet& conjunto, size_t tamanoSubconjunto) {
+    // Convertir el unordered_set a un vector para facilitar la selección aleatoria
+    vector<string> elementos(conjunto.begin(), conjunto.end());
+
+    // Verificar que el tamaño del subconjunto no sea mayor que el conjunto original
+    if (tamanoSubconjunto > elementos.size()) {
+        tamanoSubconjunto = elementos.size();
+    }
+
+    // Mezclar los elementos del vector
+    auto seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    mt19937 g(seed);
+    shuffle(elementos.begin(), elementos.end(), g);
+
+    // Crear un nuevo unordered_set con los primeros 'tamanoSubconjunto' elementos
+    ShingleSet subconjunto;
+    for (size_t i = 0; i < tamanoSubconjunto; ++i) {
+        subconjunto.insert(elementos[i]);
+    }
+
+    return subconjunto;
+}
 //////////////////////////////////////// MINHASH ///////////////////////////////////////
 
 vector<uint64_t> getMinhashSignature(const ShingleSet& shingles, uint64_t numHashes) {

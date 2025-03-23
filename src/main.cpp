@@ -1,5 +1,7 @@
 #include "utils.hpp"
 #include "hashing_tools.hpp"
+#include <cstdlib>
+#include <ctime>
 #include <numeric>
 namespace fs = std::filesystem;
 using namespace std::chrono;
@@ -15,21 +17,19 @@ struct pair_hash {
 };
 
 float average(vector<int> const& v){
-    if(v.empty()){
-        return 0;
-    }
-
+    if (v.empty()) return 0;
     auto const count = static_cast<float>(v.size());
     return reduce(v.begin(), v.end()) / count;
 }
 
 
 int main() {
+    srand(time(0));
     vector<int> kValues = {2, 4, 6, 8};
     vector<int> numHashesValues = {50, 100, 200, 300};
     vector<int> bandsValues = {10, 20, 50, 100};
     vector<int> rowsValues = {2, 3, 4, 5, 6};
-    vector<double> simThresholdValues = {0.4, 0.6, 0.8};
+    vector<double> simThresholdValues = {0.4/*, 0.6, 0.8*/};
 
     ofstream csvFile;
     csvFile.open("dataFile.csv");
@@ -37,6 +37,10 @@ int main() {
     ofstream simsCsvFile;
     simsCsvFile.open("simsFile.csv");
     simsCsvFile << "Documet1,Document2,numHashes,ShinglesJaccard,MinHashJaccard" << endl;
+
+    ofstream aproxCsvFile;
+    aproxCsvFile.open("aproxFile.csv");
+    aproxCsvFile << "Documet1,Document2,ShinglesJaccard,AproxSim" << endl;
 
     // Encabezado del CSV
     csvFile << "K,numHashes,numBandas,rows,Threshold,";
@@ -46,7 +50,7 @@ int main() {
     csvFile << "TruePositives,FalsePositives,FalseNegatives,Precision,Recall" << endl;
     
 
-
+    double aprox = 0.0;
     for (int ii = 0; ii < kValues.size(); ++ii) {
         for (int jj = 0; jj < numHashesValues.size(); ++jj) {
             for (int kk = 0; kk < bandsValues.size(); ++kk) {
@@ -90,6 +94,7 @@ int main() {
                             sizeOfDocs2[i] = docsShingles[i].size();
                         }
                         auto Tshingles = high_resolution_clock::now();
+
                         /////////////////////////////// GENERACION DE MINHASHES //////////////////////////////
 
                         vector<vector<uint64_t>> docsSignatures(numOfDocs);
@@ -102,6 +107,7 @@ int main() {
                             //for (auto val : docsSignatures[i]) cout << val << " ";
                             //cout << endl;
                             //Save size of documents minHash
+
                             sizeOfDocs3[i] = docsSignatures[i].size();
                         }
                         auto TminHash = high_resolution_clock::now();
@@ -117,6 +123,18 @@ int main() {
                         int falsePositives = 0;
                         int falseNegatives = 0;
                         double truePositives = 0;
+
+                        for (int i = 0; i < numOfDocs; ++i) {
+                            for (int j = i + 1; j < numOfDocs; ++j) {
+                                ShingleSet s1 = obtenerSubconjuntoAleatorio(docsShingles[i], rand() % numOfDocs + 1);
+                                ShingleSet s2 = obtenerSubconjuntoAleatorio(docsShingles[j], rand() % numOfDocs + 1);
+                                
+
+                                double siim = shinglesJaccardSimilarity(s1, s2);
+                                double siim2 = similitudShingles(s1.size(), s2.size(), numOfDocs);
+                                aproxCsvFile << docs[i].stem() << "," << docs[j].stem() << "," << siim << "," << siim2 << endl;
+                            }
+                        }
 
                         /// CALCULO DE LOS PARES VERDADEROS ///
                         unordered_set<pair<int,int>, pair_hash> trueSimilarPairs;
