@@ -29,11 +29,18 @@ int main() {
 
     int K = 5;
     vector<ShingleSet> docsShingles(numOfDocs);
+    //Vector with size of documents and shingles
+    vector<int> sizeOfDocs(numOfDocs);
+    vector<int> sizeOfDocs2(numOfDocs);
+    vector<int> sizeOfDocs3(numOfDocs);
 
     for (int i = 0; i < numOfDocs; ++i) {
         string docPath = docsDir + "/" + docs[i].string();
         string docText = loadDocument(docPath);
         generateShingles(docsShingles[i], docText, K);
+        //Save size of document
+        sizeOfDocs[i] = docText.size();
+        sizeOfDocs2[i] = docsShingles[i].size();
     }
     auto Tshingles = high_resolution_clock::now();
     /////////////////////////////// GENERACION DE MINHASHES //////////////////////////////
@@ -41,11 +48,16 @@ int main() {
     int numHashes = 200;
     vector<vector<uint64_t>> docsSignatures(numOfDocs);
 
+    //Vector with size of documents after shingles
+
+
     for (int i = 0; i < numOfDocs; ++i) {
         docsSignatures[i] = getMinhashSignature(docsShingles[i], numHashes);
         cout << "Signature doc " << i << ": ";
         for (auto val : docsSignatures[i]) cout << val << " ";
         cout << endl;
+        //Save size of documents minHash
+        sizeOfDocs3[i] = docsSignatures[i].size();
     }
     auto TminHash = high_resolution_clock::now();
 
@@ -103,12 +115,6 @@ int main() {
         precision = truePositives / (truePositives + falsePositives);
     }
 
-    cout << "True Positives: " << truePositives << endl;
-    cout << "False Positives: " << falsePositives << endl;
-    cout << "False Negatives: " << falseNegatives << endl;
-    cout << "Precision: " << precision << endl;
-    cout << "Recall: " << recall << endl;
-
     //Final Timestamp
     auto Tfinal = high_resolution_clock::now();
 
@@ -132,9 +138,18 @@ int main() {
     dataFile.open("dataFile.txt");
 
 
-    //print times
-    /*cout << endl << "-------------Data-------------" << endl;
-    cout << "Text size before cleanup: " << textSizeBC << " bytes/characters" << endl;
+    //Data
+    dataFile << endl << "-------------Data-------------" << endl;
+    dataFile << "Number of Files: " << numOfDocs << " files" << endl;
+    for (int i = 0; i < numOfDocs; ++i) {
+        //Print sizes of documents in each fase
+        dataFile << "--- Sizes of Document " << i << " ---" << endl;
+        dataFile << "Cleaned: " << sizeOfDocs[i] << " bytes   ";
+        dataFile << "Shingles: " << sizeOfDocs2[i] * K << " bytes   ";
+        dataFile << "Cleaned: " << sizeOfDocs3[i] * sizeof(uint64_t) << " bytes" << endl;
+    }
+
+    /*cout << "Text size before cleanup: " << textSizeBC << " bytes/characters" << endl;
     cout << "Text size after cleanup: " << textSizeAC << " bytes/characters" << endl;
     cout << "We removed: " << textSizeBC - textSizeAC << " bytes/characters" << endl;
     cout << "Num of Shingles: " << shinglesNum << " shingles" << endl;
@@ -142,9 +157,19 @@ int main() {
     cout << "Num of MinHash: " << minHashNum << " shingles" << endl;
     cout << "Size of MinHash: " << minHashSize << " bytes" << endl;*/
 
+    //Time
     dataFile << endl << "-------------Time-------------" << endl;
     dataFile << "Time to read clean files: " << Dread.count() << " ms" << endl;
     dataFile << "Time to generate shingles: " << Dshingles.count() << " ms" << endl;
     dataFile << "Time to generate minHash: " << DminHash.count() << " ms" << endl;
     dataFile << "Total time processing: " << Dtotal.count() << " ms" << endl;
+
+    //Statistics
+    dataFile << endl << "-------------Statistics-------------" << endl;
+    dataFile << "True Positives: " << truePositives << endl;
+    dataFile << "False Positives: " << falsePositives << endl;
+    dataFile << "False Negatives: " << falseNegatives << endl;
+    dataFile << "Precision: " << precision << endl;
+    dataFile << "Recall: " << recall << endl;
+
 }
