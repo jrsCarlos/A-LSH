@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <algorithm>
 #include <iostream>
 #include "xxh64.hpp"
 #include <unordered_set>

@@ -40,7 +40,7 @@ int main() {
 
     ofstream aproxCsvFile;
     aproxCsvFile.open("aproxFile.csv");
-    aproxCsvFile << "Documet1,Document2,ShinglesJaccard,AproxSim" << endl;
+    aproxCsvFile << "Documet1,Document2,K,ShinglesJaccard,AproxSim" << endl;
 
     // Encabezado del CSV
     csvFile << "K,numHashes,numBandas,rows,Threshold,";
@@ -126,13 +126,13 @@ int main() {
 
                         for (int i = 0; i < numOfDocs; ++i) {
                             for (int j = i + 1; j < numOfDocs; ++j) {
-                                ShingleSet s1 = obtenerSubconjuntoAleatorio(docsShingles[i], rand() % numOfDocs + 1);
-                                ShingleSet s2 = obtenerSubconjuntoAleatorio(docsShingles[j], rand() % numOfDocs + 1);
+                                ShingleSet s1 = obtenerSubconjuntoAleatorio(docsShingles[i], rand() % docsShingles[i].size() + 1);
+                                ShingleSet s2 = obtenerSubconjuntoAleatorio(docsShingles[j], rand() % docsShingles[i].size() + 1);
                                 
 
                                 double siim = shinglesJaccardSimilarity(s1, s2);
-                                double siim2 = similitudShingles(s1.size(), s2.size(), numOfDocs);
-                                aproxCsvFile << docs[i].stem() << "," << docs[j].stem() << "," << siim << "," << siim2 << endl;
+                                double siim2 = similitudShingles(s1.size(), s2.size(), docsShingles[i].size());
+                                aproxCsvFile << docs[i].stem() << "," << docs[j].stem() << "," << K << "," << siim << "," << siim2 << endl;
                             }
                         }
 

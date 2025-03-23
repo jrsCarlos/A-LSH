@@ -21,8 +21,8 @@ double shinglesJaccardSimilarity(const ShingleSet& s1, const ShingleSet& s2) {
 }
 
 double similitudShingles(int shingleNumi, int shingleNumj, int baseShingleNum){
-    double pi = shingleNumi/baseShingleNum;
-    double pj = shingleNumj/baseShingleNum;
+    double pi = (double)shingleNumi/baseShingleNum;
+    double pj = (double)shingleNumj/baseShingleNum;
 
     return (pi * pj)/((pi + pj) - (pi * pj));
 }
