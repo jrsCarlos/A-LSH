@@ -146,7 +146,7 @@ int main() {
         dataFile << "--- Sizes of Document " << i << " ---" << endl;
         dataFile << "Cleaned: " << sizeOfDocs[i] << " bytes   ";
         dataFile << "Shingles: " << sizeOfDocs2[i] * K << " bytes   ";
-        dataFile << "Cleaned: " << sizeOfDocs3[i] * sizeof(uint64_t) << " bytes" << endl;
+        dataFile << "MinHash: " << sizeOfDocs3[i] * sizeof(uint64_t) << " bytes" << endl;
     }
 
     /*cout << "Text size before cleanup: " << textSizeBC << " bytes/characters" << endl;
