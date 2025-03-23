@@ -1,0 +1,136 @@
+
+-------------Data-------------
+Number of Files: 60 files
+--- Sizes of Document 0 ---
+Cleaned: 2642 bytes   Shingles: 7164 bytes   MinHash: 2400 bytes
+--- Sizes of Document 1 ---
+Cleaned: 3123 bytes   Shingles: 8636 bytes   MinHash: 2400 bytes
+--- Sizes of Document 2 ---
+Cleaned: 2113 bytes   Shingles: 5796 bytes   MinHash: 2400 bytes
+--- Sizes of Document 3 ---
+Cleaned: 2642 bytes   Shingles: 7136 bytes   MinHash: 2400 bytes
+--- Sizes of Document 4 ---
+Cleaned: 3123 bytes   Shingles: 8596 bytes   MinHash: 2400 bytes
+--- Sizes of Document 5 ---
+Cleaned: 2113 bytes   Shingles: 5808 bytes   MinHash: 2400 bytes
+--- Sizes of Document 6 ---
+Cleaned: 2642 bytes   Shingles: 7116 bytes   MinHash: 2400 bytes
+--- Sizes of Document 7 ---
+Cleaned: 3123 bytes   Shingles: 8612 bytes   MinHash: 2400 bytes
+--- Sizes of Document 8 ---
+Cleaned: 2113 bytes   Shingles: 5772 bytes   MinHash: 2400 bytes
+--- Sizes of Document 9 ---
+Cleaned: 2642 bytes   Shingles: 7124 bytes   MinHash: 2400 bytes
+--- Sizes of Document 10 ---
+Cleaned: 3123 bytes   Shingles: 8664 bytes   MinHash: 2400 bytes
+--- Sizes of Document 11 ---
+Cleaned: 2113 bytes   Shingles: 5796 bytes   MinHash: 2400 bytes
+--- Sizes of Document 12 ---
+Cleaned: 2642 bytes   Shingles: 7160 bytes   MinHash: 2400 bytes
+--- Sizes of Document 13 ---
+Cleaned: 3123 bytes   Shingles: 8636 bytes   MinHash: 2400 bytes
+--- Sizes of Document 14 ---
+Cleaned: 2113 bytes   Shingles: 5816 bytes   MinHash: 2400 bytes
+--- Sizes of Document 15 ---
+Cleaned: 2642 bytes   Shingles: 7132 bytes   MinHash: 2400 bytes
+--- Sizes of Document 16 ---
+Cleaned: 3123 bytes   Shingles: 8580 bytes   MinHash: 2400 bytes
+--- Sizes of Document 17 ---
+Cleaned: 2113 bytes   Shingles: 5788 bytes   MinHash: 2400 bytes
+--- Sizes of Document 18 ---
+Cleaned: 2642 bytes   Shingles: 7116 bytes   MinHash: 2400 bytes
+--- Sizes of Document 19 ---
+Cleaned: 3123 bytes   Shingles: 8592 bytes   MinHash: 2400 bytes
+--- Sizes of Document 20 ---
+Cleaned: 2113 bytes   Shingles: 5820 bytes   MinHash: 2400 bytes
+--- Sizes of Document 21 ---
+Cleaned: 2642 bytes   Shingles: 7144 bytes   MinHash: 2400 bytes
+--- Sizes of Document 22 ---
+Cleaned: 3123 bytes   Shingles: 8592 bytes   MinHash: 2400 bytes
+--- Sizes of Document 23 ---
+Cleaned: 2113 bytes   Shingles: 5824 bytes   MinHash: 2400 bytes
+--- Sizes of Document 24 ---
+Cleaned: 2642 bytes   Shingles: 7084 bytes   MinHash: 2400 bytes
+--- Sizes of Document 25 ---
+Cleaned: 3123 bytes   Shingles: 8644 bytes   MinHash: 2400 bytes
+--- Sizes of Document 26 ---
+Cleaned: 2113 bytes   Shingles: 5820 bytes   MinHash: 2400 bytes
+--- Sizes of Document 27 ---
+Cleaned: 2642 bytes   Shingles: 7120 bytes   MinHash: 2400 bytes
+--- Sizes of Document 28 ---
+Cleaned: 3123 bytes   Shingles: 8564 bytes   MinHash: 2400 bytes
+--- Sizes of Document 29 ---
+Cleaned: 2113 bytes   Shingles: 5776 bytes   MinHash: 2400 bytes
+--- Sizes of Document 30 ---
+Cleaned: 2642 bytes   Shingles: 7092 bytes   MinHash: 2400 bytes
+--- Sizes of Document 31 ---
+Cleaned: 3123 bytes   Shingles: 8648 bytes   MinHash: 2400 bytes
+--- Sizes of Document 32 ---
+Cleaned: 2113 bytes   Shingles: 5900 bytes   MinHash: 2400 bytes
+--- Sizes of Document 33 ---
+Cleaned: 2642 bytes   Shingles: 7120 bytes   MinHash: 2400 bytes
+--- Sizes of Document 34 ---
+Cleaned: 3123 bytes   Shingles: 8632 bytes   MinHash: 2400 bytes
+--- Sizes of Document 35 ---
+Cleaned: 2113 bytes   Shingles: 5816 bytes   MinHash: 2400 bytes
+--- Sizes of Document 36 ---
+Cleaned: 2642 bytes   Shingles: 7100 bytes   MinHash: 2400 bytes
+--- Sizes of Document 37 ---
+Cleaned: 3123 bytes   Shingles: 8616 bytes   MinHash: 2400 bytes
+--- Sizes of Document 38 ---
+Cleaned: 2113 bytes   Shingles: 5800 bytes   MinHash: 2400 bytes
+--- Sizes of Document 39 ---
+Cleaned: 2642 bytes   Shingles: 7140 bytes   MinHash: 2400 bytes
+--- Sizes of Document 40 ---
+Cleaned: 3123 bytes   Shingles: 8664 bytes   MinHash: 2400 bytes
+--- Sizes of Document 41 ---
+Cleaned: 2113 bytes   Shingles: 5820 bytes   MinHash: 2400 bytes
+--- Sizes of Document 42 ---
+Cleaned: 2642 bytes   Shingles: 7084 bytes   MinHash: 2400 bytes
+--- Sizes of Document 43 ---
+Cleaned: 3123 bytes   Shingles: 8632 bytes   MinHash: 2400 bytes
+--- Sizes of Document 44 ---
+Cleaned: 2113 bytes   Shingles: 5816 bytes   MinHash: 2400 bytes
+--- Sizes of Document 45 ---
+Cleaned: 2642 bytes   Shingles: 7092 bytes   MinHash: 2400 bytes
+--- Sizes of Document 46 ---
+Cleaned: 3123 bytes   Shingles: 8664 bytes   MinHash: 2400 bytes
+--- Sizes of Document 47 ---
+Cleaned: 2113 bytes   Shingles: 5800 bytes   MinHash: 2400 bytes
+--- Sizes of Document 48 ---
+Cleaned: 2642 bytes   Shingles: 7112 bytes   MinHash: 2400 bytes
+--- Sizes of Document 49 ---
+Cleaned: 3123 bytes   Shingles: 8568 bytes   MinHash: 2400 bytes
+--- Sizes of Document 50 ---
+Cleaned: 2113 bytes   Shingles: 5844 bytes   MinHash: 2400 bytes
+--- Sizes of Document 51 ---
+Cleaned: 2642 bytes   Shingles: 7092 bytes   MinHash: 2400 bytes
+--- Sizes of Document 52 ---
+Cleaned: 3123 bytes   Shingles: 8636 bytes   MinHash: 2400 bytes
+--- Sizes of Document 53 ---
+Cleaned: 2113 bytes   Shingles: 5768 bytes   MinHash: 2400 bytes
+--- Sizes of Document 54 ---
+Cleaned: 2642 bytes   Shingles: 7140 bytes   MinHash: 2400 bytes
+--- Sizes of Document 55 ---
+Cleaned: 3123 bytes   Shingles: 8624 bytes   MinHash: 2400 bytes
+--- Sizes of Document 56 ---
+Cleaned: 2113 bytes   Shingles: 5780 bytes   MinHash: 2400 bytes
+--- Sizes of Document 57 ---
+Cleaned: 2642 bytes   Shingles: 7116 bytes   MinHash: 2400 bytes
+--- Sizes of Document 58 ---
+Cleaned: 3123 bytes   Shingles: 8628 bytes   MinHash: 2400 bytes
+--- Sizes of Document 59 ---
+Cleaned: 2113 bytes   Shingles: 5800 bytes   MinHash: 2400 bytes
+
+-------------Time-------------
+Time to read clean files: 1889 ms
+Time to generate shingles: 38920 ms
+Time to generate minHash: 995362 ms
+Total time processing: 1387775 ms
+
+-------------Statistics-------------
+True Positives: 528
+False Positives: 20
+False Negatives: 16
+Precision: 0.963504
+Recall: 0.970588
