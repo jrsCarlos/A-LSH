@@ -1,5 +1,6 @@
 #include "utils.hpp"
 #include "hashing_tools.hpp"
+#include <numeric>
 namespace fs = std::filesystem;
 using namespace std::chrono;
 using namespace std;
@@ -13,6 +14,15 @@ struct pair_hash {
     }
 };
 
+float average(vector<int> const& v){
+    if(v.empty()){
+        return 0;
+    }
+
+    auto const count = static_cast<float>(v.size());
+    return reduce(v.begin(), v.end()) / count;
+}
+
 
 int main() {
     vector<int> kValues = {2, 4, 6, 8};
@@ -21,11 +31,25 @@ int main() {
     vector<int> rowsValues = {2, 3, 4, 5, 6};
     vector<double> simThresholdValues = {0.4, 0.6, 0.8};
 
+    ofstream csvFile;
+    csvFile.open("dataFile.csv");
+
+    // Encabezado del CSV
+    csvFile << "K,numHashes,numBandas,rows,Threshold,";
+    csvFile << "NumOfDocs,";
+    csvFile << "Bytes_CleaneDoc,Bytes_ShinglesDoc,Bytes_MinHashDoc,";
+    csvFile << "Time_ReadCleanFiles,Time_GenerateShingles,Time_GenerateMinHash,Time_TotalProcessing,"; 
+    csvFile << "TruePositives,FalsePositives,FalseNegatives,Precision,Recall" << endl;
+    
+
+
     for (int ii = 0; ii < kValues.size(); ++ii) {
         for (int jj = 0; jj < numHashesValues.size(); ++jj) {
             for (int kk = 0; kk < bandsValues.size(); ++kk) {
                 for (int ll = 0; ll < rowsValues.size(); ++ll) {
                     for (int mm = 0; mm < simThresholdValues.size(); ++mm) {
+
+                        
 
                         int K = kValues[ii];
                         int numHashes = numHashesValues[jj];
@@ -33,8 +57,9 @@ int main() {
                         int rows = rowsValues[ll];
                         double simThreshold = simThresholdValues[mm];
 
-                        if (bands * rows != numHashes) continue;
+                        
 
+                        if (bands * rows != numHashes) continue;
                         //Get time stamp begining
                         auto Tstart = high_resolution_clock::now();
 
@@ -142,7 +167,7 @@ int main() {
                         //Duration to finish
                         auto Dtotal = duration_cast<microseconds>(Tfinal - Tstart);
 
-                        ofstream dataFile;
+                        /*ofstream dataFile;
                         dataFile.open("dataFile.txt");
 
 
@@ -170,35 +195,22 @@ int main() {
                         dataFile << "False Positives: " << falsePositives << endl;
                         dataFile << "False Negatives: " << falseNegatives << endl;
                         dataFile << "Precision: " << precision << endl;
-                        dataFile << "Recall: " << recall << endl;
+                        dataFile << "Recall: " << recall << endl;*/
 
-                        ofstream csvFile;
-                        csvFile.open("dataFile.csv");
-
-                        // Encabezado del CSV
-                        csvFile << "NumOfDocs\n";
-                        csvFile << numOfDocs << "\n\n";
-
-                        csvFile << "Cleaned,Shingles,MinHash\n";
-                        for (int i = 0; i < numOfDocs; ++i) {
-                            csvFile << sizeOfDocs[i] << "," 
-                                    << sizeOfDocs2[i] * K << ","
-                                    << sizeOfDocs3[i] * sizeof(uint64_t) << "\n";
-                        }
-                        csvFile << "\n";
-
-                        csvFile << "ReadCleanFiles,GenerateShingles,GenerateMinHash,TotalProcessing\n";
+                        csvFile << K << "," << numHashes << "," << bands << "," << rows << "," << simThreshold << ",";
+                        csvFile << numOfDocs << ",";
+                        csvFile << average(sizeOfDocs) << "," 
+                                << average(sizeOfDocs2) * K << ","
+                                << average(sizeOfDocs3) * sizeof(uint64_t) << ",";
                         csvFile << Dread.count() << ","
                                 << Dshingles.count() << ","
                                 << DminHash.count() << ","
-                                << Dtotal.count() << "\n\n";
-
-                        csvFile << "TruePositives,FalsePositives,FalseNegatives,Precision,Recall\n";
+                                << Dtotal.count() << ",";
                         csvFile << truePositives << ","
                                 << falsePositives << ","
                                 << falseNegatives << ","
                                 << precision << ","
-                                << recall << "\n";
+                                << recall << endl;
                     }
                 }
             }
