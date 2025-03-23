@@ -149,14 +149,6 @@ int main() {
         dataFile << "MinHash: " << sizeOfDocs3[i] * sizeof(uint64_t) << " bytes" << endl;
     }
 
-    /*cout << "Text size before cleanup: " << textSizeBC << " bytes/characters" << endl;
-    cout << "Text size after cleanup: " << textSizeAC << " bytes/characters" << endl;
-    cout << "We removed: " << textSizeBC - textSizeAC << " bytes/characters" << endl;
-    cout << "Num of Shingles: " << shinglesNum << " shingles" << endl;
-    cout << "Size of Shingles: " << shinglesSize << " bytes" << endl;
-    cout << "Num of MinHash: " << minHashNum << " shingles" << endl;
-    cout << "Size of MinHash: " << minHashSize << " bytes" << endl;*/
-
     //Time
     dataFile << endl << "-------------Time-------------" << endl;
     dataFile << "Time to read clean files: " << Dread.count() << " ms" << endl;
@@ -171,5 +163,33 @@ int main() {
     dataFile << "False Negatives: " << falseNegatives << endl;
     dataFile << "Precision: " << precision << endl;
     dataFile << "Recall: " << recall << endl;
+
+    ofstream csvFile;
+    csvFile.open("dataFile.csv");
+
+    // Encabezado del CSV
+    csvFile << "NumOfDocs\n";
+    csvFile << numOfDocs << "\n\n";
+
+    csvFile << "Cleaned,Shingles,MinHash\n";
+    for (int i = 0; i < numOfDocs; ++i) {
+        csvFile << sizeOfDocs[i] << "," 
+                << sizeOfDocs2[i] * K << ","
+                << sizeOfDocs3[i] * sizeof(uint64_t) << "\n";
+    }
+    csvFile << "\n";
+
+    csvFile << "ReadCleanFiles,GenerateShingles,GenerateMinHash,TotalProcessing\n";
+    csvFile << Dread.count() << ","
+            << Dshingles.count() << ","
+            << DminHash.count() << ","
+            << Dtotal.count() << "\n\n";
+
+    csvFile << "TruePositives,FalsePositives,FalseNegatives,Precision,Recall\n";
+    csvFile << truePositives << ","
+            << falsePositives << ","
+            << falseNegatives << ","
+            << precision << ","
+            << recall << "\n";
 
 }
