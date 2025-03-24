@@ -24,6 +24,8 @@ Este proyecto ...
 │
 ├── main.exe                   # Ejecutable principal
 │
+│__ *.csv                      # Archivos donde almacenamos las salidas de los experimentos
+│
 │__ Makefile                   # Reglas de compilacion
 ```
 
