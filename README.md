@@ -5,10 +5,11 @@ Este proyecto ...
 
 ## Estructura del Proyecto
 ```
-├── clean-docs/                # Documentos preprocesados
+├── exp-docs/                  # Documentos utilizados para los experimentos
 │
 ├── deps/
 │   ├── json.hpp               # Dependencia para manipular JSONs
+│   │__ xxh64.hpp              # Familia de funciones de hash
 │   │__ stopwords.json         # Lista de stopwords
 │
 ├── docs/                      # Documentos originales
@@ -19,7 +20,9 @@ Este proyecto ...
 │
 ├── .gitattributes             # Configuración de Git
 │
-├── main.exe                   # Ejecutable
+├── docsCreator.exe            # Ejecutable que genera los documentos para los experimetos
+│
+├── main.exe                   # Ejecutable principal
 │
 │__ Makefile                   # Reglas de compilacion
 ```
@@ -36,9 +39,19 @@ make
 ```
 
 ### Ejecución
-Para ejecutar el programa después de compilarlo:
+Generar los documentos para los experimentos:
+```sh
+./docsCreator.exe
+```
+
+Ejecutar el programa principal:
 ```sh
 make run
+```
+
+Ejecutar para limpiar todos los archivos generados:
+```sh
+make clean
 ```
 
 ## Autores

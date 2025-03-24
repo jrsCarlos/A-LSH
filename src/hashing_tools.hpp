@@ -33,13 +33,6 @@ double minhashJaccardSimilarity(const vector<uint64_t>& s1, const vector<uint64_
 
 ////////////////////////////////////////// LSH //////////////////////////////////////////
 
-//struct LSHParams {
-    // int bands;      // Número de bandas
-    // int rows;       // Filas por banda
-    // double t;       // Umbral teórico (para registro)
-    // int numHashes;  // Total de hashes (n = bands*rows)
-//};
-
 vector<pair<int,int>> LSH(const vector<vector<uint64_t>>& signatures, int numBands, int numRows);
 
 #endif

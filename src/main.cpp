@@ -29,27 +29,27 @@ int main() {
     vector<int> numHashesValues = {50, 100, 200, 300};
     vector<int> bandsValues = {10, 20, 50, 100};
     vector<int> rowsValues = {2, 3, 4, 5, 6};
-    vector<double> simThresholdValues = {0.4/*, 0.6, 0.8*/};
+    vector<double> simThresholdValues = {0.4};
 
+    // Archivo CSV: Guardamos los datos de la ejecucion 
     ofstream csvFile;
     csvFile.open("dataFile.csv");
-
-    ofstream simsCsvFile;
-    simsCsvFile.open("simsFile.csv");
-    simsCsvFile << "Documet1,Document2,numHashes,ShinglesJaccard,MinHashJaccard" << endl;
-
-    ofstream aproxCsvFile;
-    aproxCsvFile.open("aproxFile.csv");
-    aproxCsvFile << "Documet1,Document2,K,ShinglesJaccard,AproxSim" << endl;
-
-    // Encabezado del CSV
     csvFile << "K,numHashes,numBandas,rows,Threshold,";
     csvFile << "NumOfDocs,";
     csvFile << "Bytes_CleaneDoc,Bytes_ShinglesDoc,Bytes_MinHashDoc,";
     csvFile << "Time_ReadCleanFiles,Time_GenerateShingles,Time_GenerateMinHash,Time_TotalProcessing,"; 
     csvFile << "TruePositives,FalsePositives,FalseNegatives,Precision,Recall" << endl;
-    
 
+    // Archivo CSV: Guardamos las similitudes reales y las minhash
+    ofstream simsCsvFile;
+    simsCsvFile.open("simsFile.csv");
+    simsCsvFile << "Documet1,Document2,numHashes,ShinglesJaccard,MinHashJaccard" << endl;
+
+    // Archivo CSV: Guardamos las similitudes reales y las aproximadas
+    ofstream aproxCsvFile;
+    aproxCsvFile.open("aproxFile.csv");
+    aproxCsvFile << "Documet1,Document2,K,ShinglesJaccard,AproxSim" << endl;
+    
     double aprox = 0.0;
     for (int ii = 0; ii < kValues.size(); ++ii) {
         for (int jj = 0; jj < numHashesValues.size(); ++jj) {
@@ -57,18 +57,14 @@ int main() {
                 for (int ll = 0; ll < rowsValues.size(); ++ll) {
                     for (int mm = 0; mm < simThresholdValues.size(); ++mm) {
 
-                        
-
                         int K = kValues[ii];
                         int numHashes = numHashesValues[jj];
                         int bands = bandsValues[kk];
                         int rows = rowsValues[ll];
                         double simThreshold = simThresholdValues[mm];
 
-                        
-
+                    
                         if (bands * rows != numHashes) continue;
-                        //Get time stamp begining
                         auto Tstart = high_resolution_clock::now();
 
                         // Leemos todos los documentos
@@ -80,7 +76,6 @@ int main() {
                         /////////////////////////////// GENERACION DE SHINGLES ///////////////////////////////
 
                         vector<ShingleSet> docsShingles(numOfDocs);
-                        //Vector with size of documents and shingles
                         vector<int> sizeOfDocs(numOfDocs);
                         vector<int> sizeOfDocs2(numOfDocs);
                         vector<int> sizeOfDocs3(numOfDocs);
@@ -99,15 +94,9 @@ int main() {
 
                         vector<vector<uint64_t>> docsSignatures(numOfDocs);
 
-                        //Vector with size of documents after shingles
-
                         for (int i = 0; i < numOfDocs; ++i) {
                             docsSignatures[i] = getMinhashSignature(docsShingles[i], numHashes);
-                            //cout << "Signature doc " << i << ": ";
-                            //for (auto val : docsSignatures[i]) cout << val << " ";
-                            //cout << endl;
                             //Save size of documents minHash
-
                             sizeOfDocs3[i] = docsSignatures[i].size();
                         }
                         auto TminHash = high_resolution_clock::now();
@@ -124,6 +113,8 @@ int main() {
                         int falseNegatives = 0;
                         double truePositives = 0;
 
+                        //////////////////////////// CALCULO DE SIMILITUDES APROXIMADAS ////////////////////////////
+                        
                         for (int i = 0; i < numOfDocs; ++i) {
                             for (int j = i + 1; j < numOfDocs; ++j) {
                                 ShingleSet s1 = obtenerSubconjuntoAleatorio(docsShingles[i], rand() % docsShingles[i].size() + 1);
@@ -190,35 +181,7 @@ int main() {
                         //Duration to finish
                         auto Dtotal = duration_cast<microseconds>(Tfinal - Tstart);
 
-                        /*ofstream dataFile;
-                        dataFile.open("dataFile.txt");
-
-
-                        //Data
-                        dataFile << endl << "-------------Data-------------" << endl;
-                        dataFile << "Number of Files: " << numOfDocs << " files" << endl;
-                        for (int i = 0; i < numOfDocs; ++i) {
-                            //Print sizes of documents in each fase
-                            dataFile << "--- Sizes of Document " << i << " ---" << endl;
-                            dataFile << "Cleaned: " << sizeOfDocs[i] << " bytes   ";
-                            dataFile << "Shingles: " << sizeOfDocs2[i] * K << " bytes   ";
-                            dataFile << "MinHash: " << sizeOfDocs3[i] * sizeof(uint64_t) << " bytes" << endl;
-                        }
-
-                        //Time
-                        dataFile << endl << "-------------Time-------------" << endl;
-                        dataFile << "Time to read clean files: " << Dread.count() << " ms" << endl;
-                        dataFile << "Time to generate shingles: " << Dshingles.count() << " ms" << endl;
-                        dataFile << "Time to generate minHash: " << DminHash.count() << " ms" << endl;
-                        dataFile << "Total time processing: " << Dtotal.count() << " ms" << endl;
-
-                        //Statistics
-                        dataFile << endl << "-------------Statistics-------------" << endl;
-                        dataFile << "True Positives: " << truePositives << endl;
-                        dataFile << "False Positives: " << falsePositives << endl;
-                        dataFile << "False Negatives: " << falseNegatives << endl;
-                        dataFile << "Precision: " << precision << endl;
-                        dataFile << "Recall: " << recall << endl;*/
+                        ///////////////////////////////// GUARDAR DATOS EN CSV /////////////////////////////////
 
                         csvFile << K << "," << numHashes << "," << bands << "," << rows << "," << simThreshold << ",";
                         csvFile << numOfDocs << ",";
@@ -239,4 +202,8 @@ int main() {
             }
         }
     }
+
+    aproxCsvFile.close();
+    simsCsvFile.close();
+    csvFile.close();
 }

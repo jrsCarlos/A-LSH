@@ -43,49 +43,6 @@ string generatePermutedDocument(const vector<string>& words, int num) {
     return permutedText;
 }
 
-// Function to generate k-shingles from words
-unordered_set<string> generateKShingles(const vector<string>& words, int k) {
-    unordered_set<string> shingles;
-
-    // Iterate through the words and create k-shingles
-    for (size_t i = 0; i <= words.size() - k; ++i) {
-        string shingle = "";
-        for (int j = 0; j < k; ++j) {
-            shingle += words[i + j] + " ";
-        }
-        shingle.pop_back();  // Remove the extra space at the end
-        shingles.insert(shingle);  // Insert the shingle into the set
-    }
-
-    return shingles;
-}
-
-// Function to generate a virtual document with random k-shingles
-void generateVirtualDocument(const unordered_set<string>& baseShingles, int num) {
-    vector<string> shingles(baseShingles.begin(), baseShingles.end());
-
-    // Shuffle the shingles randomly
-    random_device rd;
-    mt19937 randomNumGenerator(rd());
-    shuffle(shingles.begin(), shingles.end(), randomNumGenerator);
-
-    // Select a random subset of shingles (50 shingles for example)
-    int numShinglesToSelect = min(50, (int)shingles.size());
-
-    // Write the shingles into the virtual document
-    ofstream file("virtual_document_" + to_string(num) + ".txt");
-    if (!file) {
-        cerr << "Error: Unable to open the file for writing." << endl;
-        exit(1);
-    }
-
-    for (int i = 0; i < numShinglesToSelect; ++i) {
-        file << shingles[i] << "\n";
-    }
-
-    file.close();
-}
-
 int main() {
     string docsDir = "./docs";
     string expDir = "./exp-docs";
@@ -107,44 +64,17 @@ int main() {
         return 1;
     }
 
-    cout << "Selecciona que bloque de documentos generar:" << endl;
-    cout << "1. Permutar Documento Base" << endl;
-    cout << "2. K-Shingles" << endl; 
-    int choice;
-    cin >> choice;
-
     string text = loadDocument(docsDir + "/" + docsNames[docIdx].string());
     vector<string> words = readWords(text);
  
-    if(choice == 1){
-        if (words.size() < 50) {
-            cerr << "Error: El documento base debe tener al menos 50 palabras" << endl;
-            return 1;
-        }
-
-        for (int i = 0; i < numDocuments; i++) {
-            string permutedText = generatePermutedDocument(words, i + 1);
-            string name = expDir + '/' + to_string(i+1) + "-" + docsNames[docIdx].string();
-            saveDocument(permutedText, name);
-        }
+    if (words.size() < 50) {
+        cerr << "Error: El documento base debe tener al menos 50 palabras" << endl;
+        return 1;
     }
-    else { //k
-        int k;
-        cout << "Enter the k-shingle length (k): ";
-        cin >> k;
 
-        if (words.size() < 100) {
-            cerr << "Error: The base document must contain at least 100 words." << endl;
-            return 1;
-        }
-
-        unordered_set<string> baseShingles = generateKShingles(words, k);
-
-        for (int i = 0; i < numDocuments; ++i) {
-            generateVirtualDocument(baseShingles, i + 1);
-        }
+    for (int i = 0; i < numDocuments; i++) {
+        string permutedText = generatePermutedDocument(words, i + 1);
+        string name = expDir + '/' + to_string(i+1) + "-" + docsNames[docIdx].string();
+        saveDocument(permutedText, name);
     }
-  
-    cout << "Virtual documents generated successfully!" << endl;
-    return 0;
 }

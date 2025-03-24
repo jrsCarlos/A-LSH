@@ -132,8 +132,6 @@ vector<pair<int,int>> LSH(const vector<vector<uint64_t>>& signatures, int numBan
         }
     }
     
-    /////////////////////////////////// PARES TO INDICES ///////////////////////////////////
-
     vector<pair<int,int>> candidatePairs;
     for (const auto& pair : uniquePairs) candidatePairs.push_back(pair);
     return candidatePairs;
